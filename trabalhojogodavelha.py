@@ -28,6 +28,21 @@ def organizar_resposta(resp: str):
         respfinal[1] = 2
     return respfinal
 
+def exibir_tabuleiro(tab):
+        print("    A   B   C")
+        print(f"1   {tab[0][0]}  | {tab[0][1]}  | {tab[0][2]}")
+        print("   ---+---+---")
+        print(f"2   {tab[1][0]}  | {tab[1][1]}  | {tab[1][2]}")
+        print("   ---+---+---")
+        print(f"3   {tab[2][0]}  | {tab[2][1]}  | {tab[2][2]}")
+
+caractere=input().upper()
+if caractere=='X' or caractere=='O':
+    tabuleiro=[
+        ['','',''],
+        ['','',''],
+        ['','','']
+        ]
 
 
 x = "A4"
