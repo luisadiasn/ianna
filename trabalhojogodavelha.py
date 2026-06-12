@@ -1,4 +1,11 @@
+#grupo: Ana luisa e Felipe Menezes
+
+# -------------------------------------------------------------------------------
+#                              * FUNÇÕES *
+#--------------------------------------------------------------------------------
+
 def criar_tabela():
+    #essa função cria um array bidimensional 3x3 vazio
     tabela = []
     for i in range(3):
         linha = []
@@ -8,6 +15,7 @@ def criar_tabela():
     return tabela
 
 def organizar_resposta(resp: str):
+    #organiza a resposta para ser interpretada de forma organizada
     respfinal = []
     for i in resp:
         respfinal.append(i)
@@ -22,10 +30,17 @@ def organizar_resposta(resp: str):
         respfinal[1] = 2
     return respfinal
 
-def desenhar_tabela(tabela: list):
-    print(tabela)
+def desenhar_tabela(tab: list):
+    #desenha a tabela para o usuario
+    print("    A   B   C")
+    print(f"1   {tab[0][0]}  | {tab[0][1]}  | {tab[0][2]}")
+    print("   ----+----+----")
+    print(f"2   {tab[1][0]}  | {tab[1][1]}  | {tab[1][2]}")
+    print("   ----+----+----")
+    print(f"3   {tab[2][0]}  | {tab[2][1]}  | {tab[2][2]}")
 
 def receber_resposta(resp: list, tabela: list, jogador_atual: int):
+    #recebe a resposta e atualiza a tabela para ser desenhada e checar a vitoria
     k = resp[0]
     f = resp[1]
     contador_i = 0
@@ -35,7 +50,7 @@ def receber_resposta(resp: list, tabela: list, jogador_atual: int):
         contador_j = 0
         linha_final = []
         for j in i:
-            if contador_i == k and contador_j == f:
+            if contador_i == k and contador_j == f and j == " ":
                 if jogador_atual == 1:
                     linha_final.append("O")
                 else:
@@ -53,6 +68,7 @@ def receber_resposta(resp: list, tabela: list, jogador_atual: int):
 
 def checar_em_volta(lista: list,pos_x: int, pos_y: int, jogador: str):
     #x é y e y é x em um plano cartesiano
+    #checa em todas as direções em volta da posição atual
     contador_x = 0
     contador_y = 0
     for i in range(-2, 3):
@@ -70,17 +86,25 @@ def checar_em_volta(lista: list,pos_x: int, pos_y: int, jogador: str):
             contador_y += 1
         if contador_y >= 3:
             return True
-    #metodo rudimentar de checar as diagonais
-    if (lista[0][0] == jogador) and (lista[1][1] == jogador) and (lista [2][2] == jogador):
+    #metodo rudimentar de checar as diagonais e verticais
+    if (lista[0][0] == jogador) and (lista[1][1] == jogador) and (lista[2][2] == jogador):
         return True
-    if (lista[0][2] == jogador) and (lista[1][1] == jogador) and (lista [2][0] == jogador):
+    if (lista[0][2] == jogador) and (lista[1][1] == jogador) and (lista[2][0] == jogador):
         return True
+    if (lista[0][0] == jogador) and (lista[1][0] == jogador) and (lista[2][0] == jogador):
+        return True
+    if (lista[0][1] == jogador) and (lista[1][1] == jogador) and (lista[2][1] == jogador):
+        return True
+    if (lista[0][2] == jogador) and (lista[1][2] == jogador) and (lista[2][2] == jogador):
+        return True
+
     return False
     
 
 
 
 def checar_vitoria(tabela: list):
+    #checa quem ganhou e retorna em string a pessoa que ganha
     contador_i = 0
     contador_j = 0
     for i in tabela:
@@ -93,32 +117,61 @@ def checar_vitoria(tabela: list):
         contador_i += 1
     return False
     
+def mostrar_placar(pont_x: int, pont_o: int):
+    #mostra o placar no final do jogo
+    print("            Player X         |          Player O")
+    print(f"               {pont_x}                            {pont_o}")
 
 
+# -------------------------------------------------------------------------------
+#                              * CÓDIGO PRINCIPAL *
+#--------------------------------------------------------------------------------
 # se o jogador atual é 0, então é turno de x, se o jogador atual é 1 então é turno de O
 pont_x = 0
 pont_O = 0
 jogador_atual = 0
-resp_temp = input()
+print("         Jogo da Velha")
+print("Marca do P1 >> X")
+print("Marca do P2 >> O")
+
 tabela = criar_tabela()
+desenhar_tabela(tabela)
+resp_temp = input()
+contador_de_mov = 0
 while True:
     resp = organizar_resposta(resp_temp)
     tabela = receber_resposta(resp, tabela, jogador_atual)
-
+    #altera o turno do jogador
     if jogador_atual == 1:
         jogador_atual = 0
     else:
         jogador_atual = 1
     desenhar_tabela(tabela)
-    if checar_vitoria(tabela) == "X":
+    quem_ganha = checar_vitoria(tabela)
+    #checa quem ganha a partir da função
+    if quem_ganha == "X":
         print("X ganhou!")
         pont_x += 1
+        mostrar_placar(pont_x, pont_O)
+        x = input("Enter para continuar")
+        # reseta a tabela para outro jogo
         tabela = criar_tabela()
         desenhar_tabela(tabela)
-    elif checar_vitoria(tabela) == "O":
+    elif quem_ganha == "O":
         print("O ganhou!")
         pont_O += 1
+        mostrar_placar(pont_x, pont_O)
+        x = input("Enter para continuar")
+        # reseta a tabela para outro jogo
         tabela = criar_tabela()
         desenhar_tabela(tabela)
+    elif contador_de_mov >= 8:
+        print("empate")
+        mostrar_placar(pont_x, pont_O)
+        # reseta a tabela para outro jogo
+        tabela = criar_tabela()
+        desenhar_tabela(tabela)
+        contador_de_mov = 0
 
     resp_temp = input()
+    contador_de_mov += 1
