@@ -36,7 +36,12 @@ def exibir_tabuleiro(tab):
         print("   ---+---+---")
         print(f"3   {tab[2][0]}  | {tab[2][1]}  | {tab[2][2]}")
         
-def placar():
+def exibir_placar(marca_p1, marca_p2, vitorias_p1, vitorias_p2): #exibe o placar dos jogadores
+    print("\n")
+    print(f"            Player {marca_p1} #x ou O          |           Player {marca_p2}")
+    print(f"               {vitorias_p1}               |               {vitorias_p2}")
+    print("\n")
+
     
 
 caractere=input().upper()
